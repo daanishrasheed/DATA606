@@ -1,0 +1,16 @@
+---
+title: "setup"
+format: typst
+editor: visual
+---
+
+
+```{r}
+remotes::install_github('jbryer/DATA606', force = TRUE)
+```
+
+```{r}
+library(DATA606)
+getLabs() # This will list all the labs available
+startLab('Lab1') # This will copy the lab folder to your working directory
+```
