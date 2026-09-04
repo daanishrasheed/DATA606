@@ -231,7 +231,14 @@ You can toggle between plots and help files using the tabs at the top of that pa
 
 1.  Is there an apparent trend in the number of girls baptized over the years? How would you describe it? (To ensure that your lab report is comprehensive, be sure to include the code needed to make the plot as well as your written interpretation.)
 
-**Insert your answer here**
+**Using the code below:**
+
+```{r}
+ggplot(data = arbuthnot, aes(x = year, y = girls)) + geom_line()
+
+```
+
+**It could be clearly seen in the graph that a low point was hit in the late 1650s and has been steadily increasing ever since.**
 
 ### R as a big calculator
 
