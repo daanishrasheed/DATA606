@@ -18,7 +18,7 @@ editor_options:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(eval = TRUE, message = FALSE, warning = FALSE, output = TRUE)
 library(tidyverse)
 library(openintro)
 ```
@@ -329,6 +329,13 @@ Note that we are using the new `total` variable we created earlier in our calcul
 
 **Insert your answer here**
 
+```{r proportion of boys vs year}
+ggplot(data = arbuthnot, aes(x = year, y = boy_ratio)) + 
+  geom_line()
+```
+
+What is apparent from the graph is that there really isn't any observable trend with the ratio of boys being baptized from 1629 to 1710.
+
 ::: {}
 **Tip:** If you use the up and down arrow keys, you can scroll through your previous commands, your so-called command history.
 You can also access it by clicking on the history tab in the upper right panel.
@@ -371,11 +378,58 @@ arbuthnot %>%
 
 **Insert your answer here**
 
+```{r}
+summarize(present)
+```
+
+```{r}
+range(present$year)
+```
+
+years included in this data go from 1940 to 2002
+
+```{r}
+names(present)
+```
+
+Column names are "year", "boys", "girls"
+
+```{r}
+dim(present)
+```
+
+Dimensions of the data is 63 rows by 3 columns
+
 1.  How do these counts compare to Arbuthnot's? Are they of a similar magnitude?
 
 **Insert your answer here**
 
-1.  Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. *Hint:* You should be able to reuse your code from Exercise 3 above, just replace the dataframe name.
+Arbuthnot had 19 more rows, however the number columns match what is in present.
+
+1.  Make a plot that displays the proportion of boys born over time.
+    What do you see?
+    Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.?
+    Include the plot in your response.
+    *Hint:* You should be able to reuse your code from Exercise 3 above, just replace the dataframe name.
+
+    ```{r echo=TRUE}
+    present <- present %>%
+      mutate(total = boys + girls)
+    ```
+
+    ```{r echo=TRUE}
+    present <- present %>%
+      mutate(boy_ratio = boys / total)
+    ```
+
+    ```{r echo=TRUE}
+    ggplot(data = present, aes(x = year, y = boy_ratio)) + geom_line()
+    ```
+
+    ![](images/clipboard-3639933949.png)
+
+    After observing the plot above and comparing it with the arbuthnot, I can conclude that boys are born in greater proportion than girls even in the US.
+    However, it is on a downward trend whereas in arbuthnot, there was no trend, as previously mentioned.
 
 **Insert your answer here**
 
@@ -387,6 +441,8 @@ present %>%
 ```
 
 **Insert your answer here**
+
+The year with the most total number of births in the U.S. is in 1961.
 
 These data come from reports by the Centers for Disease Control.
 You can learn more about them by bringing up the help file using the command `?present`.
