@@ -1,6 +1,9 @@
 ---
 title: "Introduction to R and RStudio"
-author: ""
+author: "Daanish Rasheed"
+format: html
+execute:
+  echo: true
 output:
   pdf_document: default
   html_document:
@@ -185,7 +188,7 @@ Notice that the way R has printed these data is different.
 When we looked at the complete data frame, we saw 82 rows, one on each line of the display.
 These data are no longer structured in a table with other variables, so they are displayed one right after another.
 Objects that print out in this way are called *vectors*; they represent a set of numbers.
-R has added numbers in [brackets] along the left side of the printout to indicate locations within the vector.
+R has added numbers in \[brackets\] along the left side of the printout to indicate locations within the vector.
 For example, 5218 follows `[1]`, indicating that `5218` is the first entry in the vector.
 And if `[43]` starts a line, then that would mean the first number on that line would represent the 43rd entry in the vector.
 
@@ -435,7 +438,7 @@ Arbuthnot had 19 more rows, however the number columns match what is in present.
 
 1.  In what year did we see the most total number of births in the U.S.? *Hint:* First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the total column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions: `arrange` (for sorting). We can arrange the data in a descending order with another function: `desc` (for descending order). The sample code is provided below.
 
-```{r sample-arrange, eval=FALSE}
+```{r echo=TRUE}
 present %>%
   arrange(desc(total))
 ```
