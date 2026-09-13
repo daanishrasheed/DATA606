@@ -248,12 +248,45 @@ use the `|` instead of the comma.
 
 **Insert your answer here**
 
+```{r}
+sfo_feb_flights <- nycflights %>%
+  filter(dest == "SFO", month == 2)
+
+nrow(sfo_feb_flights)
+```
+
+There are 68 flights that happen in February going to San Fransisco.
+
 3.  Describe the distribution of the **arrival** delays of these flights
     using a histogram and appropriate summary statistics. **Hint:** The
     summary statistics you use should depend on the shape of the
     distribution.
 
 **Insert your answer here**
+
+```{r}
+ggplot(data = sfo_feb_flights, aes(x = arr_delay)) +
+  geom_histogram()
+```
+
+```{r}
+sfo_feb_flights %>%
+  summarise(mean_dd   = mean(arr_delay), 
+            median_dd = median(arr_delay), 
+            n         = n())
+```
+
+**The flight data shows that flights are generally landing early, but a
+few heavy delays are dragging the average up. Since negative numbers
+indicate early arrivals, the median of -11 minutes means that half of
+all flights actually landed 11 or more minutes ahead of schedule.
+However, the mean is higher at -4.5 minutes because it is heavily
+influenced by a few severe delays. This is proven true from the
+histogram that represents a few outliers, one having a 200 minute delay.
+This histogram also reveals a right-skewed distribution, meaning that
+while a typical traveler can realistically expect an early arrival, rare
+and massive delays are heavily pulling the overall mathematical average
+closer to zero.**
 
 Another useful technique is quickly calculating summary statistics for
 various groups in your data frame. For example, we can modify the above
@@ -274,6 +307,12 @@ summary statistics.
     Which carrier has the most variable arrival delays?
 
 **Insert your answer here**
+
+```{r}
+sfo_feb_flights %>%
+  group_by(carrier) %>%
+  summarise(median_dd = median(arr_delay), iqr_dd = IQR(arr_delay), n_flights = n())
+```
 
 ### Departure delays by month
 
@@ -296,6 +335,13 @@ nycflights %>%
   arrange(desc(mean_dd))
 ```
 
+```{r}
+nycflights %>%
+  group_by(month) %>%
+  summarise(median_dd = median(dep_delay)) %>%
+  arrange(desc(median_dd))
+```
+
 5.  Suppose you really dislike departure delays and you want to schedule
     your travel in a month that minimizes your potential departure delay
     leaving NYC. One option is to choose the month with the lowest mean
@@ -303,7 +349,17 @@ nycflights %>%
     lowest median departure delay. What are the pros and cons of these
     two choices?
 
-**Insert your answer here**
+The selection of the month that has the lowest mean implies that you
+have chosen the month which will protect you against the disaster. What
+I really love about the mean measure is that it takes into account
+months in which there occur some airport disasters such as thunderstorms
+in summer and blizzards in winter. However, it should be noticed that
+the presence of several extremely bad days will spoil the impression
+from the whole month. If you decide to choose the month that has the
+lowest median then you have chosen the month that has the best “typical”
+day. The advantage is that you will get the information about the
+experience of the average passenger excluding any accidents. The
+disadvantage is that the median measure ignores delays that may occur.
 
 ### On time departure rate for NYC airports
 
@@ -359,7 +415,8 @@ ggplot(data = nycflights, aes(x = origin, fill = dep_type)) +
   geom_bar()
 ```
 
-**Insert your answer here**
+**It would be best to fly out of LaGuardia Airport as it has the highest
+percentage of being on time.**
 
 ------------------------------------------------------------------------
 
@@ -371,13 +428,25 @@ ggplot(data = nycflights, aes(x = origin, fill = dep_type)) +
     distance divided by number of hours of travel, and note that
     `air_time` is given in minutes.
 
-**Insert your answer here**
+```{r}
+nycflights <- nycflights %>%
+  mutate(avg_speed = distance/(air_time/60))
+```
 
 8.  Make a scatterplot of `avg_speed` vs. `distance`. Describe the
     relationship between average speed and distance. **Hint:** Use
     `geom_point()`.
 
-**Insert your answer here**
+```{r}
+ggplot(data = nycflights, aes(x = avg_speed, y = distance)) +
+  geom_point()
+```
+
+Judging from the graph given, it seems that there is a exponentia
+relationship between avg_speed and distance. As the distance grows, the
+avg-speed taken by a plane increases, however, in most cases, it caps at
+around 530 mph. It seems that no matter how much distance is in the
+journey, the speed won't pass that cap (outside of one outlier).
 
 9.  Replicate the following plot. **Hint:** The data frame plotted only
     contains flights from American Airlines, Delta Airlines, and United
@@ -391,3 +460,13 @@ knitr::include_graphics('Question9Plot.png')
 ```
 
 **Insert your answer here**
+
+```{r}
+filtered_flights <- nycflights %>% 
+  filter(carrier %in% c("AA", "DL", "UA"))
+
+```
+
+```{r}
+ggplot(data = filtered_flights, aes(x = dep_delay, y = arr_delay, color = carrier)) +  geom_point()
+```
