@@ -124,7 +124,7 @@ think about some questions we might want to answer with these data:
 
 ### Departure delays
 
-Let's start by examing the distribution of departure delays of all
+Let's start by examining the distribution of departure delays of all
 flights with a histogram.
 
 ```{r hist-dep-delay}
@@ -152,7 +152,9 @@ ggplot(data = nycflights, aes(x = dep_delay)) +
 1.  Look carefully at these three histograms. How do they compare? Are
     features revealed in one that are obscured in another?
 
-**Insert your answer here**
+All three histograms can give an idea about the distribution of the
+data, however, you can see the distribution much clearer when the bin
+size is lower.
 
 If you want to visualize only on delays of flights headed to Los
 Angeles, you need to first `filter` the data for flights with that
