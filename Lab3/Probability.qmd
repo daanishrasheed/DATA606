@@ -1,0 +1,11 @@
+---
+title: "Lab03"
+format: typst
+editor: visual
+---
+
+```{r}
+library(DATA606)
+getLabs() # This will list all the labs available
+startLab('Lab3') # This will copy the lab folder to your working directory
+```
