@@ -77,7 +77,25 @@ dairy_queen <- fastfood %>%
     of calories from fat of the options from these two restaurants. How
     do their centers, shapes, and spreads compare?
 
-**Insert your answer here**
+```{r}
+ggplot(bind_rows(mcdonalds, dairy_queen), aes(x = cal_fat)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~ restaurant, ncol = 1)
+
+bind_rows(mcdonalds, dairy_queen) %>%
+  group_by(restaurant) %>%
+  summarise(mean = mean(cal_fat), median = median(cal_fat),
+            sd = sd(cal_fat), IQR = IQR(cal_fat),
+            min = min(cal_fat), max = max(cal_fat))
+```
+
+Both distributions are unimodal and right skewed. Their centers are
+close, but the mean and median values for McDonald’s are slightly
+larger. The mean is 286, and the median is 240 calories of fat for
+McDonald’s, whereas the mean and median for Dairy Queen are 261 and 220,
+respectively. McDonald’s has a longer tail, with a tail of its histogram
+going all the way to 1,270 calories of fat, whereas Dairy Queen's tail
+ends at around 670 calories.
 
 ## The normal distribution
 
@@ -130,6 +148,12 @@ line to be drawn. If we left it out, the line would be drawn in black.
     normal distribution?
 
 **Insert your answer here**
+
+No. Although there is one peak in the histogram, the shape is
+right-skewed, and the bars do not fit a normal distribution curve, since
+the values in the histogram are clustered on the left and spread out in
+the long tail to the right, while the probabilities in the curve are
+below zero.
 
 ## Evaluating the normal distribution
 
@@ -188,6 +212,16 @@ as its normal probability plot.
 
 **Insert your answer here**
 
+```{r}
+ggplot(data = NULL, aes(sample = sim_norm)) +
+  geom_line(stat = "qq")
+```
+
+Not all data points fall on the regression line. However, they fit well
+along it, with slight fluctuations towards the tails. The Dairy Queen
+data plot has a clear deviation from the regression line as it bends
+upwards at the higher end due to right skewness.
+
 Even better than comparing the original plot to a single plot generated
 from a normal distribution is to compare it to many more plots using the
 following function. It shows the Q-Q plot corresponding to the original
@@ -205,10 +239,32 @@ qqnormsim(sample = cal_fat, data = dairy_queen)
 
 **Insert your answer here**
 
+What makes the Q-Q plot for the actual data set different is that it
+deviates from those created by simulation. The simulated data sets
+appear linear, but the Q-Q plot for Dairy Queen bends upwards in the
+high-end tail and bends downwards in the low-end tail, where the minimum
+is 0. It suggests that the calories from fat are not close to being
+normally distributed.
+
 5.  Using the same technique, determine whether or not the calories from
     McDonald's menu appear to come from a normal distribution.
 
 **Insert your answer here**
+
+```{r}
+sim_norm1 <- rnorm(n = nrow(mcdonalds), mean = dqmean, sd = dqsd)
+ggplot(data = NULL, aes(sample = sim_norm1)) +
+  geom_line(stat = "qq")
+```
+
+```{r}
+qqnormsim(sample = calories, data = mcdonalds)
+```
+
+The calories in McDonald's do not appear normally distributed. While the
+Q-Q plot for the actual data set curves upwards sharply towards the high
+values, those in the simulations follow the straight line much more
+closely. This distribution is very heavy positively skewed.
 
 ## Normal probabilities
 
