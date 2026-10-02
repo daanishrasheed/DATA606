@@ -405,8 +405,8 @@ mcdonalds %>%
 
 I chose McDonald's. The Q-Q plot curves upward above the line, with the
 upper points rising far above where a normal would put them, so the
-variable is **right skewed**. The histogram confirms it: most items
-cluster at lower carb values with a long tail to the right proven by
-mean 48.8 \> median 46.
+variable is right skewed. The histogram confirms it: most items cluster
+at lower carb values with a long tail to the right proven by mean 48.8
+\> median 46.
 
 ------------------------------------------------------------------------
