@@ -264,7 +264,7 @@ qqnormsim(sample = calories, data = mcdonalds)
 The calories in McDonald's do not appear normally distributed. While the
 Q-Q plot for the actual data set curves upwards sharply towards the high
 values, those in the simulations follow the straight line much more
-closely. This distribution is very heavy positively skewed.
+closely. This distribution is very heavy right skewed.
 
 ## Normal probabilities
 
@@ -317,6 +317,32 @@ accurate the theoretical probabilities will be.
 
 **Insert your answer here**
 
+Questions:
+
+1.  What is the probability that a randomly chosen Dairy Queen item has
+    fewer than 200 calories from fat?
+2.  What is the probability that a randomly chosen McDonald's item has
+    more than 500 calories?
+
+```{r}
+# Q1: Dairy Queen, cal_fat < 200
+pnorm(200, mean = dqmean, sd = dqsd)
+dairy_queen %>% summarise(empirical = mean(cal_fat < 200))
+
+# Q2: McDonald's, calories > 500
+mcmean <- mean(mcdonalds$calories)
+mcsd   <- sd(mcdonalds$calories)
+1 - pnorm(500, mean = mcmean, sd = mcsd)
+mcdonalds %>% summarise(empirical = mean(calories > 500))
+```
+
+The McDonald's question agrees more closely as it has a difference of
+about 0.02, vs. about 0.08 for Dairy Queen. This is a coincidence since
+McDonald's calories are not very normal overall. The threshold of 500 is
+near the center of the distribution, where the normal curve fits
+reasonably, while the tails are where a skewed distribution and a normal
+curve disagree most.
+
 ------------------------------------------------------------------------
 
 ## More Practice
@@ -327,11 +353,28 @@ accurate the theoretical probabilities will be.
 
 **Insert your answer here**
 
+```{r}
+ggplot(fastfood, aes(sample = sodium)) +
+  geom_line(stat = "qq") +
+  facet_wrap(~ restaurant, scales = "free")
+```
+
+Burger King is the closest to normal. Its Q-Q plot hugs the line most
+tightly and its skewness is near zero. Arby's and Taco Bell are the next
+closest; McDonald's, Sonic, and Dairy Queen are the furthest from
+normal.
+
 8.  Note that some of the normal probability plots for sodium
     distributions seem to have a stepwise pattern. why do you think this
     might be the case?
 
 **Insert your answer here**
+
+The steps occur due to the fact that the sodium content is measured in
+whole numbers, and many food items have the exact same sodium content.
+This results in ties, leading to horizontal steps in the plot, as the
+same quantile in the sample is plotted against several quantiles from
+the theoretical distribution.
 
 9.  As you can see, normal probability plots can be used both to assess
     normality and visualize skewness. Make a normal probability plot for
@@ -341,5 +384,29 @@ accurate the theoretical probabilities will be.
     findings.
 
 **Insert your answer here**
+
+```{r}
+mcdonalds %>%
+  ggplot(aes(sample = total_carb)) +
+  geom_line(stat = "qq")
+
+mcdonalds %>%
+  ggplot(aes(x = total_carb)) +
+  geom_histogram()
+```
+
+```{r}
+mcdonalds %>%
+  summarise(
+    mean = mean(total_carb),
+    median = median(total_carb)
+  )
+```
+
+I chose McDonald's. The Q-Q plot curves upward above the line, with the
+upper points rising far above where a normal would put them, so the
+variable is **right skewed**. The histogram confirms it: most items
+cluster at lower carb values with a long tail to the right proven by
+mean 48.8 \> median 46.
 
 ------------------------------------------------------------------------
