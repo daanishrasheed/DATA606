@@ -1,0 +1,20 @@
+---
+title: "Lab5"
+author: "Daanish Rasheed"
+date: "2026-10-08"
+output: pdf_document
+---
+
+```{r}
+library(DATA606)
+getLabs() # This will list all the labs available
+startLab('Lab5a') # This will copy the lab folder to your working directory
+```
+
+```{r}
+library(DATA606)
+getLabs() # This will list all the labs available
+startLab('Lab5b') # This will copy the lab folder to your working directory
+```
+
+## 
