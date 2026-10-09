@@ -127,10 +127,23 @@ samp <- us_adults %>%
 
 **Insert your answer here**
 
+```{r}
+samp %>%
+  count(climate_change_affects) %>%
+  mutate(p = n /sum(n))
+```
+
+According to the results of the code above, 72% of the sample think
+climate change affects their local community.
+
 1.  Would you expect another student's sample proportion to be identical
     to yours? Would you expect it to be similar? Why or why not?
 
-**Insert your answer here**
+No, I would not anticipate the other student’s proportion being the same
+as mine. This is because every student takes a unique random sample of
+60 adults, which means that their sample proportions are not going to be
+the same. However, the sample proportions will be quite similar since
+they all come from the same population.
 
 ## Confidence intervals
 
