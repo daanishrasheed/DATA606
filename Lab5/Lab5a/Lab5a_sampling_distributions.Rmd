@@ -339,6 +339,20 @@ so from a **different** sample!
 
 **Insert your answer here**
 
+```{r}
+sample_props_small <- global_monitor %>%
+  rep_sample_n(size = 10, reps = 25, replace = TRUE) %>%
+  count(scientist_work) %>%
+  mutate(p_hat = n /sum(n)) %>%
+  filter(scientist_work == "Doesn't benefit")
+
+sample_props_small
+```
+
+`sample_props_small` has 20 observations. Each one is the sample
+proportion of "Doesn't benefit" (`p_hat`) from one random sample of 10
+people.
+
 ## Sample size and the sampling distribution
 
 Mechanics aside, let's return to the reason we used the `rep_sample_n`

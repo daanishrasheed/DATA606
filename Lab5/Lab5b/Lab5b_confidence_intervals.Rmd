@@ -237,6 +237,14 @@ reported as result of this pipeline.
 
 **Insert your answer here**
 
+The phrase “95% confidence” refers to the procedure rather than to the
+interval itself. If we were to repeat the entire procedure over and over
+again, then about 95% of such intervals would include the true
+population parameter while 5% would exclude it. Having constructed the
+confidence interval once, the true population parameter is either
+included or not included in it, so it is incorrect to state that it is
+95% likely that the interval includes it.
+
 In this case, you have the rare luxury of knowing the true population
 proportion (62%) since you have data on the entire population.
 
@@ -247,11 +255,25 @@ proportion (62%) since you have data on the entire population.
 
 **Insert your answer here**
 
+```{r}
+ci_95
+```
+
+The 95% confidence interval does capture the true population proportion
+of 62%.
+
 1.  Each student should have gotten a slightly different confidence
     interval. What proportion of those intervals would you expect to
     capture the true population mean? Why?
 
 **Insert your answer here**
+
+My expectation is that 95 percent of the confidence intervals will
+actually cover the actual population proportion. 95 percent confidence
+levels have been set up such that 95 out of every 100 constructed
+intervals, roughly 19 out of every 20, will contain the actual value.
+The confidence bounds will vary for each student, owing to the fact that
+each student uses a different sample.
 
 In the next part of the lab, you will collect many samples to learn more
 about how sample proportions and confidence intervals constructed based
