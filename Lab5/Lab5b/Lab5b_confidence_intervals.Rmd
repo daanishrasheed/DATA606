@@ -504,7 +504,7 @@ decreases.
 
 1.  Finally, given a sample size (say, 60), how does the width of the
     interval change as you increase the number of bootstrap samples.
-    **Hint:** Does changing the number of bootstap samples affect the
+    **Hint:** Does changing the number of bootstrap samples affect the
     standard error?
 
 **Insert your answer here**
