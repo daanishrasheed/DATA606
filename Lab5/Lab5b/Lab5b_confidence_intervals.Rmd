@@ -203,12 +203,13 @@ confidence interval:
 This code will find the 95 percent confidence interval for proportion of
 US adults who think climate change affects their local community.
 
-```{r confidence interval infer}
-samp %>%
+```{r}
+ci_95 <- samp %>%
   specify(response = climate_change_affects, success = "Yes") %>%
   generate(reps = 1000, type = "bootstrap") %>%
   calculate(stat = "prop") %>%
   get_ci(level = 0.95)
+ci_95
 ```
 
 - In `specify` we specify the `response` variable and the level of that
@@ -237,13 +238,13 @@ reported as result of this pipeline.
 
 **Insert your answer here**
 
-The phrase “95% confidence” refers to the procedure rather than to the
-interval itself. If we were to repeat the entire procedure over and over
-again, then about 95% of such intervals would include the true
-population parameter while 5% would exclude it. Having constructed the
-confidence interval once, the true population parameter is either
-included or not included in it, so it is incorrect to state that it is
-95% likely that the interval includes it.
+95% confidence refers to the procedure rather than to the interval
+itself. If we were to repeat the entire procedure over and over again,
+then about 95% of such intervals would include the true population
+parameter while 5% would exclude it. Having constructed the confidence
+interval once, the true population parameter is either included or not
+included in it, so it is incorrect to state that it is 95% likely that
+the interval includes it.
 
 In this case, you have the rare luxury of knowing the true population
 proportion (62%) since you have data on the entire population.
@@ -411,6 +412,13 @@ shinyApp(
 
 **Insert your answer here**
 
+![](images/clipboard-3928695119.png)
+
+As can be observed, 48/50 of the confidence intervals capture the true
+population proportion which represents 96%. This is slightly higher than
+our 95% threshold mainly due to the fact that you can't get to that
+proportion out of 50.
+
 ------------------------------------------------------------------------
 
 ## More Practice
@@ -422,13 +430,32 @@ shinyApp(
 
 **Insert your answer here**
 
-1.  Using code from the **infer** package and data fromt the one sample
+A confidence level of 90% will be used. The 90% confidence interval
+should have a smaller width than the 95% confidence interval. This is
+because when using a lower confidence level, one increases the
+likelihood of not capturing the population proportion and hence allows
+the confidence interval to be of smaller width.
+
+1.  Using code from the **infer** package and data from the one sample
     you have (`samp`), find a confidence interval for the proportion of
     US Adults who think climate change is affecting their local
     community with a confidence level of your choosing (other than 95%)
     and interpret it.
 
 **Insert your answer here**
+
+```{r}
+ci_90 <- samp %>%
+  specify(response = climate_change_affects, success = "Yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.90)
+ci_90
+```
+
+We are 90% confident that the true proportion of US adults who think
+climate change affects their local community is between 0.517 and 0.717.
+The represented width is narrower.
 
 1.  Using the app, calculate 50 confidence intervals at the confidence
     level you chose in the previous question, and plot all intervals on
@@ -437,6 +464,12 @@ shinyApp(
     confidence level selected for the intervals?
 
 **Insert your answer here**
+
+![](images/clipboard-3132175690.png)
+
+As can be observed, 43/50 of the confidence intervals capture the true
+population proportion which represents 86%. This is slightly lower than
+our 90% threshold.
 
 1.  Lastly, try one more (different) confidence level. First, state how
     you expect the width of this interval to compare to previous ones
@@ -447,11 +480,27 @@ shinyApp(
 
 **Insert your answer here**
 
+I'll try 99%. I expect this interval to be wider than both the 90% and
+95% intervals, because capturing the true proportion 99% of the time
+requires covering more of the distribution.
+
+```{r}
+ci_99 <- samp %>%
+  specify(response = climate_change_affects, success = "Yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.99)
+ci_99
+```
+
 1.  Using the app, experiment with different sample sizes and comment on
     how the widths of intervals change as sample size changes (increases
     and decreases).
 
 **Insert your answer here**
+
+Intervals get narrower as the sample size increases, and wider as it
+decreases.
 
 1.  Finally, given a sample size (say, 60), how does the width of the
     interval change as you increase the number of bootstrap samples.
@@ -459,5 +508,8 @@ shinyApp(
     standard error?
 
 **Insert your answer here**
+
+The width of the interval does not change as the number of bootstrap
+samples increases
 
 ------------------------------------------------------------------------
