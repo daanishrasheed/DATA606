@@ -1,0 +1,858 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Foundations for statistical inference - Sampling distributions},
+  pdfauthor={Daanish Rasheed},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Foundations for statistical inference - Sampling distributions}
+\author{Daanish Rasheed}
+\date{}
+
+\begin{document}
+\maketitle
+
+In this lab, you will investigate the ways in which the statistics from
+a random sample of data can serve as point estimates for population
+parameters. We're interested in formulating a \emph{sampling
+distribution} of our estimate in order to learn about the properties of
+the estimate, such as its distribution.
+
+\protect\phantomsection\label{boxedtext}
+\textbf{Setting a seed:} We will take some random samples and build
+sampling distributions in this lab, which means you should set a seed at
+the start of your lab. If this concept is new to you, review the lab on
+probability.
+
+\subsection{Getting Started}\label{getting-started}
+
+\subsubsection{Load packages}\label{load-packages}
+
+In this lab, we will explore and visualize the data using the
+\textbf{tidyverse} suite of packages. We will also use the
+\textbf{infer} package for resampling.
+
+Let's load the packages.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(openintro)}
+\FunctionTok{library}\NormalTok{(infer)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{The data}\label{the-data}
+
+A 2019 Gallup report states the following:
+
+\begin{quote}
+The premise that scientific progress benefits people has been embodied
+in discoveries throughout the ages -- from the development of
+vaccinations to the explosion of technology in the past few decades,
+resulting in billions of supercomputers now resting in the hands and
+pockets of people worldwide. Still, not everyone around the world feels
+science benefits them personally.
+
+\textbf{Source:}
+\href{https://news.gallup.com/opinion/gallup/268121/world-science-day-knowledge-power.aspx}{World
+Science Day: Is Knowledge Power?}
+\end{quote}
+
+The Wellcome Global Monitor finds that 20\% of people globally do not
+believe that the work scientists do benefits people like them. In this
+lab, you will assume this 20\% is a true population proportion and learn
+about how sample proportions can vary from sample to sample by taking
+smaller samples from the population. We will first create our population
+assuming a population size of 100,000. This means 20,000 (20\%) of the
+population think the work scientists do does not benefit them personally
+and the remaining 80,000 think it does.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{global\_monitor }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{scientist\_work =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\StringTok{"Benefits"}\NormalTok{, }\DecValTok{80000}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\StringTok{"Doesn\textquotesingle{}t benefit"}\NormalTok{, }\DecValTok{20000}\NormalTok{))}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The name of the data frame is \texttt{global\_monitor} and the name of
+the variable that contains responses to the question \emph{``Do you
+believe that the work scientists do benefit people like you?''} is
+\texttt{scientist\_work}.
+
+We can quickly visualize the distribution of these responses using a bar
+plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(global\_monitor, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ scientist\_work)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =} \StringTok{""}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Do you believe that the work scientists do benefit people like you?"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Lab5a_sampling_distributions_files/figure-latex/bar-plot-pop-1.pdf}}
+
+We can also obtain summary statistics to confirm we constructed the data
+frame correctly.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p =}\NormalTok{ n }\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   scientist_work      n     p
+##   <chr>           <int> <dbl>
+## 1 Benefits        80000   0.8
+## 2 Doesn't benefit 20000   0.2
+\end{verbatim}
+
+\subsection{The unknown sampling
+distribution}\label{the-unknown-sampling-distribution}
+
+In this lab, you have access to the entire population, but this is
+rarely the case in real life. Gathering information on an entire
+population is often extremely costly or impossible. Because of this, we
+often take a sample of the population and use that to understand the
+properties of the population.
+
+If you are interested in estimating the proportion of people who don't
+think the work scientists do benefits them, you can use the
+\texttt{sample\_n} command to survey the population.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samp1 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sample\_n}\NormalTok{(}\DecValTok{50}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+This command collects a simple random sample of size 50 from the
+\texttt{global\_monitor} dataset, and assigns the result to
+\texttt{samp1}. This is similar to randomly drawing names from a hat
+that contains the names of all in the population. Working with these 50
+names is considerably simpler than working with all 100,000 people in
+the population.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Describe the distribution of responses in this sample. How does it
+  compare to the distribution of responses in the population.
+  \textbf{Hint:} Although the \texttt{sample\_n} function takes a random
+  sample of observations (i.e.~rows) from the dataset, you can still
+  refer to the variables in the dataset with the same names. Code you
+  presented earlier for visualizing and summarizing the population data
+  will still be useful for the sample, however be careful to not label
+  your proportion \texttt{p} since you're now calculating a sample
+  statistic, not a population parameters. You can customize the label of
+  the statistics to indicate that it comes from the sample.
+\end{enumerate}
+
+\textbf{Insert your answer here}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samp1 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{s =}\NormalTok{ n }\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   scientist_work      n     s
+##   <chr>           <int> <dbl>
+## 1 Benefits           37  0.74
+## 2 Doesn't benefit    13  0.26
+\end{verbatim}
+
+According to the results of the above code, 74\% of the sample believe
+that work scientists do provide benefit to people. The sample
+proportions are not exactly equal to the population proportions. The gap
+is due to sampling variability.
+
+If you're interested in estimating the proportion of all people who do
+not believe that the work scientists do benefits them, but you do not
+have access to the population data, your best single guess is the sample
+mean.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samp1 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   scientist_work      n p_hat
+##   <chr>           <int> <dbl>
+## 1 Benefits           37  0.74
+## 2 Doesn't benefit    13  0.26
+\end{verbatim}
+
+Depending on which 50 people you selected, your estimate could be a bit
+above or a bit below the true population proportion of 0.26. In general,
+though, the sample proportion turns out to be a pretty good estimate of
+the true population proportion, and you were able to get it by sampling
+less than 1\% of the population.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Would you expect the sample proportion to match the sample proportion
+  of another student's sample? Why, or why not? If the answer is no,
+  would you expect the proportions to be somewhat different or very
+  different? Ask a student team to confirm your answer.
+\end{enumerate}
+
+No, because every student takes a unique random sample of 50 people,
+which means that their sample proportions are not going to be the same.
+However, the sample proportions will be quite similar since they all
+come from the same population.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Take a second sample, also of size 50, and call it \texttt{samp2}. How
+  does the sample proportion of \texttt{samp2} compare with that of
+  \texttt{samp1}? Suppose we took two more samples, one of size 100 and
+  one of size 1000. Which would you think would provide a more accurate
+  estimate of the population proportion?
+\end{enumerate}
+
+\textbf{Insert your answer here}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samp2 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sample\_n}\NormalTok{(}\DecValTok{50}\NormalTok{)}
+
+\NormalTok{samp2 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   scientist_work      n p_hat
+##   <chr>           <int> <dbl>
+## 1 Benefits           42  0.84
+## 2 Doesn't benefit     8  0.16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samp3 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sample\_n}\NormalTok{(}\DecValTok{100}\NormalTok{)}
+
+\NormalTok{samp3 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   scientist_work      n p_hat
+##   <chr>           <int> <dbl>
+## 1 Benefits           81  0.81
+## 2 Doesn't benefit    19  0.19
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samp4 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sample\_n}\NormalTok{(}\DecValTok{1000}\NormalTok{)}
+
+\NormalTok{samp4 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   scientist_work      n p_hat
+##   <chr>           <int> <dbl>
+## 1 Benefits          798 0.798
+## 2 Doesn't benefit   202 0.202
+\end{verbatim}
+
+It is expected that the sample of 1000 gives the most accurate estimate,
+followed by the sample of 100. The standard error shrinks with the
+square root of the sample size (about 0.057 for n = 50, 0.040 for n =
+100 and 0.013 for n = 1000), so larger samples land closer to 0.20 more
+often. Any single sample can still miss by chance.
+
+Not surprisingly, every time you take another random sample, you might
+get a different sample proportion. It's useful to get a sense of just
+how much variability you should expect when estimating the population
+mean this way. The distribution of sample proportions, called the
+\emph{sampling distribution (of the proportion)}, can help you
+understand this variability. In this lab, because you have access to the
+population, you can build up the sampling distribution for the sample
+proportion by repeating the above steps many times. Here, we use R to
+take 15,000 different samples of size 50 from the population, calculate
+the proportion of responses in each sample, filter for only the
+\emph{Doesn't benefit} responses, and store each result in a vector
+called \texttt{sample\_props50}. Note that we specify that
+\texttt{replace\ =\ TRUE} since sampling distributions are constructed
+by sampling with replacement.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample\_props50 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+                    \FunctionTok{rep\_sample\_n}\NormalTok{(}\AttributeTok{size =} \DecValTok{50}\NormalTok{, }\AttributeTok{reps =} \DecValTok{15000}\NormalTok{, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+                    \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+                    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}
+                    \FunctionTok{filter}\NormalTok{(scientist\_work }\SpecialCharTok{==} \StringTok{"Doesn\textquotesingle{}t benefit"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+And we can visualize the distribution of these proportions with a
+histogram.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ sample\_props50, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ p\_hat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \FloatTok{0.02}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"p\_hat (Doesn\textquotesingle{}t benefit)"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Sampling distribution of p\_hat"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Sample size = 50, Number of samples = 15000"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+Next, you will review how this set of code works.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  How many elements are there in \texttt{sample\_props50}? Describe the
+  sampling distribution, and be sure to specifically note its center.
+  Make sure to include a plot of the distribution in your answer.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{nrow}\NormalTok{(sample\_props50)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 15000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample\_props50 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean =} \FunctionTok{mean}\NormalTok{(p\_hat), }\AttributeTok{sd =} \FunctionTok{sd}\NormalTok{(p\_hat), }\AttributeTok{min =} \FunctionTok{min}\NormalTok{(p\_hat), }\AttributeTok{max =} \FunctionTok{max}\NormalTok{(p\_hat))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 4
+##    mean     sd   min   max
+##   <dbl>  <dbl> <dbl> <dbl>
+## 1 0.199 0.0568  0.02  0.42
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ sample\_props50, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ p\_hat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \FloatTok{0.02}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"p\_hat (Doesn\textquotesingle{}t benefit)"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Sampling distribution of p\_hat"}\NormalTok{,}
+    \AttributeTok{subtitle =} \StringTok{"Sample size = 50, Number of samples = 15000"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Lab5a_sampling_distributions_files/figure-latex/unnamed-chunk-9-1.pdf}}
+
+\textbf{Insert your answer here}
+
+\texttt{sample\_props50} has 15000 elements. The data can be visually
+understood a being distributed normally centered around 0.2.
+
+\subsection{Interlude: Sampling
+distributions}\label{interlude-sampling-distributions}
+
+The idea behind the \texttt{rep\_sample\_n} function is
+\emph{repetition}. Earlier, you took a single sample of size \texttt{n}
+(50) from the population of all people in the population. With this new
+function, you can repeat this sampling procedure \texttt{rep} times in
+order to build a distribution of a series of sample statistics, which is
+called the \textbf{sampling distribution}.
+
+Note that in practice one rarely gets to build true sampling
+distributions, because one rarely has access to data from the entire
+population.
+
+Without the \texttt{rep\_sample\_n} function, this would be painful. We
+would have to manually run the following code 15,000 times
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sample\_n}\NormalTok{(}\AttributeTok{size =} \DecValTok{50}\NormalTok{, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(scientist\_work }\SpecialCharTok{==} \StringTok{"Doesn\textquotesingle{}t benefit"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 3
+##   scientist_work      n p_hat
+##   <chr>           <int> <dbl>
+## 1 Doesn't benefit    11  0.22
+\end{verbatim}
+
+as well as store the resulting sample proportions each time in a
+separate vector.
+
+Note that for each of the 15,000 times we computed a proportion, we did
+so from a \textbf{different} sample!
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  To make sure you understand how sampling distributions are built, and
+  exactly what the \texttt{rep\_sample\_n} function does, try modifying
+  the code to create a sampling distribution of \textbf{25 sample
+  proportions} from \textbf{samples of size 10}, and put them in a data
+  frame named \texttt{sample\_props\_small}. Print the output. How many
+  observations are there in this object called
+  \texttt{sample\_props\_small}? What does each observation represent?
+\end{enumerate}
+
+\textbf{Insert your answer here}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample\_props\_small }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rep\_sample\_n}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{, }\AttributeTok{reps =} \DecValTok{25}\NormalTok{, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(scientist\_work }\SpecialCharTok{==} \StringTok{"Doesn\textquotesingle{}t benefit"}\NormalTok{)}
+
+\NormalTok{sample\_props\_small}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 22 x 4
+## # Groups:   replicate [22]
+##    replicate scientist_work      n p_hat
+##        <int> <chr>           <int> <dbl>
+##  1         1 Doesn't benefit     2   0.2
+##  2         2 Doesn't benefit     4   0.4
+##  3         3 Doesn't benefit     5   0.5
+##  4         5 Doesn't benefit     2   0.2
+##  5         6 Doesn't benefit     1   0.1
+##  6         7 Doesn't benefit     5   0.5
+##  7         9 Doesn't benefit     1   0.1
+##  8        10 Doesn't benefit     1   0.1
+##  9        11 Doesn't benefit     2   0.2
+## 10        12 Doesn't benefit     4   0.4
+## # i 12 more rows
+\end{verbatim}
+
+\texttt{sample\_props\_small} has 20 observations. Each one is the
+sample proportion of ``Doesn't benefit'' (\texttt{p\_hat}) from one
+random sample of 10 people.
+
+\subsection{Sample size and the sampling
+distribution}\label{sample-size-and-the-sampling-distribution}
+
+Mechanics aside, let's return to the reason we used the
+\texttt{rep\_sample\_n} function: to compute a sampling distribution,
+specifically, the sampling distribution of the proportions from samples
+of 50 people.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ sample\_props50, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ p\_hat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \FloatTok{0.02}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The sampling distribution that you computed tells you much about
+estimating the true proportion of people who think that the work
+scientists do doesn't benefit them. Because the sample proportion is an
+unbiased estimator, the sampling distribution is centered at the true
+population proportion, and the spread of the distribution indicates how
+much variability is incurred by sampling only 50 people at a time from
+the population.
+
+In the remainder of this section, you will work on getting a sense of
+the effect that sample size has on your sampling distribution.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Use the app below to create sampling distributions of proportions of
+  \emph{Doesn't benefit} from samples of size 10, 50, and 100. Use 5,000
+  simulations. What does each observation in the sampling distribution
+  represent? How does the mean, standard error, and shape of the
+  sampling distribution change as the sample size increases? How (if at
+  all) do these values change if you increase the number of simulations?
+  (You do not need to include plots in your answer.)
+\end{enumerate}
+
+\textbf{Insert your answer here}
+
+The observations in the sampling distribution are the proportions of
+responses ``Doesn't benefit'' in each randomly sampled set of size n.~As
+the sample size is increased from 10 to 50 to 100, the mean value
+remains fairly constant, and close to the true proportion of 0.20. The
+mean value for n=10 is somewhat higher than 0.20 since any sample
+containing no response ``Doesn't benefit'' is rejected during the
+simulation process. The standard deviation decreases and follows very
+closely the theoretical value of √(p(1-p)/n). The distribution is first
+lumpy and right-skewed (for n=10), then bell-shaped and approximately
+normally distributed for n=50 and n=100. Increase in the number of
+simulations has no effect on the mean and standard deviation, only makes
+the histogram smoother since the spread of the sampling distribution
+depends only on the sample size.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{More Practice}\label{more-practice}
+
+So far, you have only focused on estimating the proportion of those you
+think the work scientists doesn't benefit them. Now, you'll try to
+estimate the proportion of those who think it does.
+
+Note that while you might be able to answer some of these questions
+using the app, you are expected to write the required code and produce
+the necessary plots and summary statistics. You are welcome to use the
+app for exploration.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  Take a sample of size 15 from the population and calculate the
+  proportion of people in this sample who think the work scientists do
+  enhances their lives. Using this sample, what is your best point
+  estimate of the population proportion of people who think the work
+  scientists do enchances their lives?
+\end{enumerate}
+
+\textbf{Insert your answer here}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{samp15 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{sample\_n}\NormalTok{(}\DecValTok{15}\NormalTok{)}
+
+\NormalTok{samp15 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 3
+##   scientist_work     n     p
+##   <chr>          <int> <dbl>
+## 1 Benefits          15     1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p\_15 }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(samp15}\SpecialCharTok{$}\NormalTok{scientist\_work }\SpecialCharTok{==} \StringTok{"Benefits"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+In this sample of 15, the proportion who think the work scientists do
+benefits them is 0.8. The sample proportion is the best point estimate
+of the population proportion, so my estimate is 0.8.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  Since you have access to the population, simulate the sampling
+  distribution of proportion of those who think the work scientists do
+  enchances their lives for samples of size 15 by taking 2000 samples
+  from the population of size 15 and computing 2000 sample proportions.
+  Store these proportions in as \texttt{sample\_props15}. Plot the data,
+  then describe the shape of this sampling distribution. Based on this
+  sampling distribution, what would you guess the true proportion of
+  those who think the work scientists do enchances their lives to be?
+  Finally, calculate and report the population proportion.
+\end{enumerate}
+
+\textbf{Insert your answer here}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample\_props15 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rep\_sample\_n}\NormalTok{(}\AttributeTok{size =} \DecValTok{15}\NormalTok{, }\AttributeTok{reps =} \DecValTok{2000}\NormalTok{, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(scientist\_work }\SpecialCharTok{==} \StringTok{"Benefits"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(sample\_props15, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ p\_hat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \DecValTok{1}\SpecialCharTok{/}\DecValTok{15}\NormalTok{, }\AttributeTok{center =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Lab5a_sampling_distributions_files/figure-latex/unnamed-chunk-14-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(sample\_props15}\SpecialCharTok{$}\NormalTok{p\_hat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8038
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(sample\_props15}\SpecialCharTok{$}\NormalTok{p\_hat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1046259
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   scientist_work      n     p
+##   <chr>           <int> <dbl>
+## 1 Benefits        80000   0.8
+## 2 Doesn't benefit 20000   0.2
+\end{verbatim}
+
+The shape of the distribution will be unimodal and left-skewed because
+it will have a longer tail at the low proportions end. It does not fit
+the normal distribution since the true proportion (0.80) is close to 1,
+and the sample size is also small (n = 15, thus n(1 - p) = 3 \textless{}
+10). It will be around 0.804, so my guess will be 0.80. The actual
+proportion is 0.8.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{8}
+\tightlist
+\item
+  Change your sample size from 15 to 150, then compute the sampling
+  distribution using the same method as above, and store these
+  proportions in a new object called \texttt{sample\_props150}. Describe
+  the shape of this sampling distribution and compare it to the sampling
+  distribution for a sample size of 15. Based on this sampling
+  distribution, what would you guess to be the true proportion of those
+  who think the work scientists do enchances their lives?
+\end{enumerate}
+
+\textbf{Insert your answer here}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sample\_props150 }\OtherTok{\textless{}{-}}\NormalTok{ global\_monitor }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rep\_sample\_n}\NormalTok{(}\AttributeTok{size =} \DecValTok{150}\NormalTok{, }\AttributeTok{reps =} \DecValTok{2000}\NormalTok{, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(scientist\_work) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{p\_hat =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(scientist\_work }\SpecialCharTok{==} \StringTok{"Benefits"}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(sample\_props150, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ p\_hat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \FloatTok{0.02}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{Lab5a_sampling_distributions_files/figure-latex/unnamed-chunk-17-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(sample\_props150}\SpecialCharTok{$}\NormalTok{p\_hat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8000933
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(sample\_props150}\SpecialCharTok{$}\NormalTok{p\_hat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.03282338
+\end{verbatim}
+
+The sampling distribution of n = 150 is symmetric and bell-shaped
+(normally distributed) as opposed to being left skewed in the case of n
+= 15. The mean of the two distributions is the same, but the standard
+deviation is smaller for n = 150. My estimate of the population
+proportion is 0.80.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{9}
+\tightlist
+\item
+  Of the sampling distributions from 2 and 3, which has a smaller
+  spread? If you're concerned with making estimates that are more often
+  close to the true value, would you prefer a sampling distribution with
+  a large or small spread?\\
+  \strut \\
+  The n = 150 distribution has the smaller spread (standard deviation
+  0.033 versus 0.103). To make estimates that are more often close to
+  the true value, I'd prefer a sampling distribution with a small
+  spread, because then a typical sample proportion lands close to the
+  population proportion.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\end{document}
