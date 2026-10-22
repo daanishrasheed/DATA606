@@ -38,6 +38,10 @@ library(openintro)
 library(infer)
 ```
 
+```{r}
+options(tibble.width = Inf)
+```
+
 ### The data
 
 You will be analyzing the same dataset as in the previous lab, where you
@@ -50,10 +54,35 @@ health patterns. The dataset is called `yrbss`.
 
 **Insert your answer here**
 
+```{r}
+view(yrbss)
+```
+
+```{r}
+yrbss %>%
+  count(text_while_driving_30d)
+```
+
+Among the 13,583 students: 0 days = 4,792, 1-2 days = 925, 3-5 days =
+493, 6-9 days = 311, 10-19 days = 373, 20-29 days = 298, all 30 days =
+827, did not drive = 4,646, missing = 918.
+
 2.  What is the proportion of people who have texted while driving every
     day in the past 30 days and never wear helmets?
 
 **Insert your answer here**
+
+```{r}
+yrbss %>%
+  filter(helmet_12m == "never") %>%
+  mutate(text_ind = ifelse(text_while_driving_30d == "30", "yes", "no")) %>%
+  drop_na(text_ind) %>%
+  count(text_ind) %>%
+  mutate(prop = n / sum(n))
+```
+
+Among non-helmet wearers with a response, 463 of 6,503 texted while
+driving every day, so the proportion is about 0.071**.**
 
 Remember that you can use `filter` to limit the dataset to just
 non-helmet wearers. Here, we will name the dataset `no_helmet`.
@@ -132,11 +161,11 @@ Think back to the formula for the standard error:
 $SE = \sqrt{p(1-p)/n}$. This is then used in the formula for the margin
 of error for a 95% confidence interval:
 
-$$ME = 1.96\times SE = 1.96\times\sqrt{p(1-p)/n} \,.$$
-Since the population proportion $p$ is in this $ME$ formula, it should
-make sense that the margin of error is in some way dependent on the
-population proportion. We can visualize this relationship by creating a
-plot of $ME$ vs. $p$.
+$$ME = 1.96\times SE = 1.96\times\sqrt{p(1-p)/n} \,.$$ Since the
+population proportion $p$ is in this $ME$ formula, it should make sense
+that the margin of error is in some way dependent on the population
+proportion. We can visualize this relationship by creating a plot of
+$ME$ vs. $p$.
 
 Since sample size is irrelevant to this discussion, let's just set it to
 some value ($n = 1000$) and use this value in the following
