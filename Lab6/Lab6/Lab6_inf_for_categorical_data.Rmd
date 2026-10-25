@@ -1,6 +1,6 @@
 ---
 title: "Inference for categorical data"
-author: ""
+author: "Daanish Rasheed"
 output:
   pdf_document: default
   html_document:
@@ -423,9 +423,8 @@ success-failure condition holds.
 Result: 26.9% of students sleeping 10+ hours, 84 of 312, strength train
 all 7 days, versus 16.4% of those sleeping less, 1,958 of 11,907, a
 difference of about 0.105. No permuted difference came close, so p \<
-0.001 (z ≈ 4.9). We reject H₀: there is convincing evidence that
-students who sleep 10+ hours are more likely to strength train every
-day.
+0.001. We reject H0: there is convincing evidence that students who
+sleep 10+ hours are more likely to strength train every day.
 
 ```{r}
 set.seed(607)
