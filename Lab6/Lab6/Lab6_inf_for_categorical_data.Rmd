@@ -139,6 +139,25 @@ that you are trying to do some sort of inference on a proportion.
 
 **Insert your answer here**
 
+```{r}
+set.seed(607)
+nohelmet_ci <- no_helmet %>%
+  drop_na(text_ind) %>%
+  specify(response = text_ind, success = "yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+
+nohelmet_ci
+```
+
+```{r}
+(nohelmet_ci$upper_ci - nohelmet_ci$lower_ci) / 2
+```
+
+The 95% interval is roughly (0.065, 0.078), so the margin of error is
+about 0.006.
+
 4.  Using the `infer` package, calculate confidence intervals for two
     other categorical variables (you'll need to decide which level to
     call "success", and report the associated margins of error. Interpet
@@ -147,6 +166,40 @@ that you are trying to do some sort of inference on a proportion.
     data sets to construct the confidence intervals.
 
 **Insert your answer here**
+
+I chose the proportion of students who are Hispanic and the proportion
+who sleep fewer than 5 hours on school nights.
+
+```{r}
+hispanic_ci <- yrbss %>%
+  drop_na(hispanic) %>%
+  specify(response = hispanic, success = "hispanic") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+
+sleep5_ci <- yrbss %>%
+  drop_na(school_night_hours_sleep) %>%
+  mutate(sleep_lt5 = ifelse(school_night_hours_sleep == "<5", "yes", "no")) %>%
+  specify(response = sleep_lt5, success = "yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "prop") %>%
+  get_ci(level = 0.95)
+
+bind_rows(hispanic = hispanic_ci, sleep_lt5 = sleep5_ci, .id = "variable") %>%
+  mutate(margin_of_error = (upper_ci - lower_ci) / 2)
+```
+
+Hispanic (success = "hispanic"): $\hat{p} \approx 0.256$, 95% CI margin
+of error about 0.007. We are 95% confident that between about 24.9% and
+26.4% of the high schoolers in the population this survey represents are
+Hispanic. Sleeps \< 5 hours on school nights (success = "\<5"):
+$\hat{p} \approx 0.078$, 95% CI margin of error about 0.005. We are 95%
+confident that between about 7.3% and 8.3% of these high schoolers sleep
+fewer than 5 hours on school nights.
+
+The second interval is narrower because $p$ is closer to 0, which gives
+a smaller $p(1-p)$.
 
 ## How does the proportion affect the margin of error?
 
@@ -202,6 +255,12 @@ ggplot(data = dd, aes(x = p, y = me)) +
     error maximized?
 
 **Insert your answer here**
+
+The relationship is a symmetric, inverted-U (parabola-like) curve. The
+margin of error is 0 at $p = 0$ and $p = 1$, rises as $p$ moves toward
+the middle, and is largest at $p = 0.5$, where $p(1-p)$ is maximized. So
+for a fixed sample size, proportions near 0.5 are estimated least
+precisely and proportions near 0 or 1 most precisely.
 
 ## Success-failure condition
 
@@ -264,6 +323,11 @@ shinyApp(
 
 **Insert your answer here**
 
+![](images/clipboard-2105274727.png)
+
+The center is at around 0.10. The spread seems to be somewhere around
+0.06 and 0.14. It looks like a unimodal shape.
+
 7.  Keep $n$ constant and change $p$. How does the shape, center, and
     spread of the sampling distribution vary as $p$ changes. You might
     want to adjust min and max for the $x$-axis for a better view of the
@@ -271,10 +335,22 @@ shinyApp(
 
 **Insert your answer here**
 
+With n fixed at 300, the sampling distribution is always centered at
+about p, so it slides along the x-axis as p changes. The spread is
+largest at p = 0.5 and shrinks as p approaches 0 or 1. Near p = 0.5 the
+shape is symmetric and approximately normal. As p gets small, the
+distribution becomes right-skewed and is truncated at 0, and as p gets
+large it becomes left-skewed.
+
 8.  Now also change $n$. How does $n$ appear to affect the distribution
     of $\hat{p}$?
 
 **Insert your answer here**
+
+The center stays at $p$, but increasing $n$ makes the distribution
+narrower. A larger $n$ also makes the shape more symmetric and normal,
+because $np$ and $n(1-p)$ grow. A small $n$ produces a wider, lumpier,
+skewed distribution, especially when $p$ is near 0 or 1.
 
 ------------------------------------------------------------------------
 
@@ -296,6 +372,74 @@ using `infer`, you need to include both variables within `specify`.
 
 **Insert your answer here**
 
+Hypotheses: Let $p_{10+}$ be the proportion of students sleeping 10+
+hours who strength train all 7 days, and $p_{<10}$ the proportion among
+students sleeping fewer than 10 hours.
+
+- $H_0: p_{10+} = p_{<10}$ sleep is unrelated to training every day
+- $H_A: p_{10+} > p_{<10}$ 10+ hour sleepers are more likely to train
+  every day
+
+```{r}
+sleep_strength <- yrbss %>%
+  drop_na(school_night_hours_sleep, strength_training_7d) %>%
+  mutate(sleep_10 = ifelse(school_night_hours_sleep == "10+", "10+", "<10"),
+         strength_ind = ifelse(strength_training_7d == 7, "yes", "no"))
+
+```
+
+```{r}
+sleep_strength %>%
+  count(sleep_10, strength_ind)
+```
+
+```{r}
+obs_diff <- sleep_strength %>%
+  specify(strength_ind ~ sleep_10, success = "yes") %>%
+  calculate(stat = "diff in props", order = c("10+", "<10"))
+```
+
+```{r}
+set.seed(607)
+null_dist <- sleep_strength %>%
+  specify(strength_ind ~ sleep_10, success = "yes") %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in props", order = c("10+", "<10"))
+
+obs_diff
+```
+
+```{r}
+null_dist %>% get_p_value(obs_stat = obs_diff, direction = "greater")
+```
+
+Conditions: The YRBSS is a random sample well under 10% of all U.S. high
+schoolers, and the two groups are separate students, so independence
+holds. With a pooled proportion of about 0.167, all expected counts
+(about 52, 260, 1,990 and 9,917) are well above 10, so the
+success-failure condition holds.
+
+Result: 26.9% of students sleeping 10+ hours, 84 of 312, strength train
+all 7 days, versus 16.4% of those sleeping less, 1,958 of 11,907, a
+difference of about 0.105. No permuted difference came close, so p \<
+0.001 (z ≈ 4.9). We reject H₀: there is convincing evidence that
+students who sleep 10+ hours are more likely to strength train every
+day.
+
+```{r}
+set.seed(607)
+sleep_strength %>%
+  specify(strength_ind ~ sleep_10, success = "yes") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "diff in props", order = c("10+", "<10")) %>%
+  get_ci(level = 0.95)
+```
+
+We are 95% confident that the proportion who strength train every day is
+about 5.5 to 15.4 percentage points higher among students who sleep 10+
+hours than among those who sleep less.
+
 10. Let's say there has been no difference in likeliness to strength
     train every day of the week for those who sleep 10+ hours. What is
     the probablity that you could detect a change (at a significance
@@ -303,6 +447,11 @@ using `infer`, you need to include both variables within `specify`.
     the Type 1 error.
 
 **Insert your answer here**
+
+If there were truly no difference, the probability of detecting one
+anyway is 0.05 (5%). That is the Type I error rate, the probability of
+rejecting a true null hypothesis. About 1 in 20 such studies would show
+a difference purely by chance.
 
 11. Suppose you're hired by the local government to estimate the
     proportion of residents that attend a religious service on a weekly
@@ -314,5 +463,13 @@ using `infer`, you need to include both variables within `specify`.
     margin of error. This question does not require using a dataset.
 
 **Insert your answer here**
+
+With no idea what $p$ is, use the worst case $p = 0.5$, where the margin
+of error is largest. We need $1.96\sqrt{0.5(0.5)/n} \leq 0.01$:
+
+$$n \geq \frac{1.96^2 (0.5)(0.5)}{0.01^2} = 9603.04$$
+
+We need to sample at least 9,604 people. Using this $n$, the margin of
+error is at most 1% for any true p.
 
 ------------------------------------------------------------------------
