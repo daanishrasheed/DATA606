@@ -1,0 +1,12 @@
+---
+title: "Inference for Numerical Data"
+author: "Daanish Rasheed"
+date: "2026-10-27"
+output: html_document
+---
+
+```{r}
+library(DATA606)
+getLabs() # This will list all the labs available
+startLab('Lab7') # This will copy the lab folder to your working directory
+```
