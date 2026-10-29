@@ -53,6 +53,8 @@ There are observations on 13 different variables, some categorical and some nume
 
 **Insert your answer here**
 
+Each case is a single high school student who responded to the YRBSS survey. There are 13,583 cases in the sample, each with 13 variables.
+
 Remember that you can answer this question by viewing the data in the data viewer or by using the following command:
 
 ```{r str}
