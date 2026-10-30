@@ -75,6 +75,12 @@ summary(yrbss$weight)
 
 **Insert your answer here**
 
+```{r}
+sum(is.na(yrbss$weight))
+```
+
+We are missing weights for 1,004 observations.
+
 Next, consider the possible relationship between a high schooler's weight and their physical activity. Plotting the data is a useful first step because it helps us quickly visualize trends, identify strong associations, and develop research questions.
 
 First, let's create a new variable `physical_3plus`, which will be coded as either "yes" if they are physically active for at least 3 days a week, and "no" if not.
@@ -87,6 +93,14 @@ yrbss <- yrbss %>%
 3.  Make a side-by-side boxplot of `physical_3plus` and `weight`. Is there a relationship between these two variables? What did you expect and why?
 
 **Insert your answer here**
+
+```{r}
+yrbss %>%
+  drop_na(physical_3plus) %>%
+  ggplot(aes(x = physical_3plus, y = weight)) +
+  geom_boxplot() +
+  labs(x = "Active 3+ days/week", y = "Weight (kg)")
+```
 
 The box plots show how the medians of the two distributions compare, but we can also compare the means of the distributions using the following to first group the data by the `physical_3plus` variable, and then calculate the mean `weight` in these groups using the `mean` function while ignoring missing values by setting the `na.rm` argument to `TRUE`.
 
@@ -103,6 +117,17 @@ There is an observed difference, but is this difference statistically significan
 4.  Are all conditions necessary for inference satisfied? Comment on each. You can compute the group sizes with the `summarize` command above by defining a new variable with the definition `n()`.
 
 **Insert your answer here**
+
+```{r}
+yrbss %>%
+  drop_na(physical_3plus, weight) %>%
+  group_by(physical_3plus) %>%
+  summarise(mean_weight = mean(weight), sd_weight = sd(weight), n = n())
+```
+
+Independence**:** The YRBSS is a random sample of high schoolers, and one student's weight shouldn't affect another's. The two groups are separate students, so they are independent of each other. The sample is far smaller than 10% of all U.S. high schoolers.
+
+Sample size / skew: The groups are large (about 8,342 "yes" and 4,022 "no" with recorded weights). The weight distributions are right-skewed, but with samples this big the Central Limit Theorem makes the sampling distribution of the difference in means approximately normal.
 
 5.  Write the hypotheses for testing if the average weights are different for those who exercise at least times a week and those who don't.
 
