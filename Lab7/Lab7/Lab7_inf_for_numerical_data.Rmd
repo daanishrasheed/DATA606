@@ -102,6 +102,8 @@ yrbss %>%
   labs(x = "Active 3+ days/week", y = "Weight (kg)")
 ```
 
+Both box plots are quite similar. The median for the "yes" category is a little bit higher, but both plots are positively skewed, showing a lot of high outliers. So, at best, there is a slight association between the two variables. This relationship should have gone the other way since my prediction was that students who do exercise are lighter. The reason behind this is that muscle is heavier than fat, and students who do sports tend to be larger in size.
+
 The box plots show how the medians of the two distributions compare, but we can also compare the means of the distributions using the following to first group the data by the `physical_3plus` variable, and then calculate the mean `weight` in these groups using the `mean` function while ignoring missing values by setting the `na.rm` argument to `TRUE`.
 
 ```{r by-means}
@@ -132,6 +134,11 @@ Sample size / skew: The groups are large (about 8,342 "yes" and 4,022 "no" with 
 5.  Write the hypotheses for testing if the average weights are different for those who exercise at least times a week and those who don't.
 
 **Insert your answer here**
+
+Let $\mu_{yes}$ be the mean weight of students who are physically active at least 3 days per week and $\mu_{no}$ the mean weight of those who are not.
+
+- $H_0: \mu_{yes} - \mu_{no} = 0$ - there is no difference in average weight between the two groups
+- $H_A: \mu_{yes} - \mu_{no} \neq 0$ - the average weights differ
 
 Next, we will introduce a new function, `hypothesize`, that falls into the `infer` workflow. You will use this method for conducting hypothesis tests.
 
@@ -172,6 +179,14 @@ ggplot(data = null_dist, aes(x = stat)) +
 
 **Insert your answer here**
 
+```{r}
+null_dist %>%
+  filter(stat >= obs_diff$stat) %>%
+  nrow()
+```
+
+0 of them.
+
 Now that the test is initialized and the null distribution formed, you can calculate the p-value for your hypothesis test using the function `get_p_value`.
 
 ```{r inf-weight-habit-ht-pvalue}
@@ -183,6 +198,17 @@ This the standard workflow for performing hypothesis tests.
 
 7.  Construct and record a confidence interval for the difference between the weights of those who exercise at least three times a week and those who don't, and interpret this interval in context of the data.
 
+```{r}
+yrbss %>%
+  drop_na(physical_3plus, weight) %>%
+  specify(weight ~ physical_3plus) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "diff in means", order = c("yes", "no")) %>%
+  get_ci(level = 0.95, type = "percentile")
+```
+
+The 95% confidence interval for $\mu_{yes} - \mu_{no}$ is approximately (1.2 kg, 2.5 kg). We can be 95% confident that the average weight of high school students who exercise regularly at least three days a week is 1.2 to 2.5 kg greater than the average weight of high school students who do not exercise regularly. This interval doesn’t include 0, and that supports the result of hypothesis testing, where we rejected $H_0$.
+
 ------------------------------------------------------------------------
 
 ## More Practice
@@ -191,17 +217,73 @@ This the standard workflow for performing hypothesis tests.
 
 **Insert your answer here**
 
+```{r}
+height_ci <- yrbss %>%
+  drop_na(height) %>%
+  specify(response = height) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean") %>%
+  get_ci(level = 0.95, type = "percentile")
+
+sprintf("%.5f, %.5f", height_ci$lower_ci, height_ci$upper_ci)
+```
+
+The 95% confidence interval for mean height is approximately 1.689 m, 1.693 m. We are 95% confident that the true average height of U.S. high school students is between about 1.689 and 1.693 meters.
+
 9.  Calculate a new confidence interval for the same parameter at the 90% confidence level. Comment on the width of this interval versus the one obtained in the previous exercise.
 
 **Insert your answer here**
+
+```{r}
+height_ci90 <- yrbss %>%
+  drop_na(height) %>%
+  specify(response = height) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean") %>%
+  get_ci(level = 0.90, type = "percentile")
+
+sprintf("%.5f", height_ci90$lower_ci)
+sprintf("%.5f", height_ci90$upper_ci)
+```
+
+The 90% confidence interval is approximately 1.69 m, 1.693 m. It is slightly narrower than the 95% interval. A lower confidence level uses a smaller critical value, so we get a narrower interval and we gain precision but are less confident that it captures the true mean.
 
 10. Conduct a hypothesis test evaluating whether the average height is different for those who exercise at least three times a week and those who don't.
 
 **Insert your answer here**
 
+**Hypotheses:** $H_0: \mu_{height,yes} - \mu_{height,no} = 0$ and $H_A: \mu_{height,yes} - \mu_{height,no} \neq 0$, tested at $\alpha = 0.05$.
+
+```{r}
+obs_diff_h <- yrbss %>%
+  drop_na(physical_3plus, height) %>%
+  specify(height ~ physical_3plus) %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+
+null_dist_h <- yrbss %>%
+  drop_na(physical_3plus, height) %>%
+  specify(height ~ physical_3plus) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("yes", "no"))
+
+null_dist_h %>%
+  get_p_value(obs_stat = obs_diff_h, direction = "two_sided")
+```
+
+We reject $H_0$: there is strong evidence that the average height differs between the two groups, with the more active students being taller on average. The most likely reason is that boys are taller and more likely to be physically active, so this is an association and not evidence that exercise changes height.
+
 11. Now, a non-inference task: Determine the number of different options there are in the dataset for the `hours_tv_per_school_day` there are.
 
 **Insert your answer here**
+
+```{r}
+yrbss %>%
+  count(hours_tv_per_school_day)
+n_distinct(yrbss$hours_tv_per_school_day, na.rm = TRUE)
+```
+
+There are 7.
 
 12. Come up with a research question evaluating the relationship between height or weight and sleep. Formulate the question in a way that it can be answered using a hypothesis test and/or a confidence interval. Report the statistical results, and also provide an explanation in plain language. Be sure to check all assumptions, state your $\alpha$ level, and conclude in context.
 
