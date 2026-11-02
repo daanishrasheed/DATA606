@@ -289,4 +289,65 @@ There are 7.
 
 **Insert your answer here**
 
+**Research question:** Do high schoolers who get short sleep on school nights, fewer than 7 hours, have a different average weight than those who get 7 or more hours?
+
+Let $\mu_{short}$ and $\mu_{enough}$ be the mean weights of those sleeping under 7 hours and 7+ hours.
+
+- $H_0: \mu_{short} - \mu_{enough} = 0$
+- $H_A: \mu_{short} - \mu_{enough} \neq 0$
+- $\alpha = 0.05$
+
+```{r}
+set.seed(600)
+yrbss_sleep <- yrbss %>%
+  mutate(sleep_group = ifelse(school_night_hours_sleep %in% c("<5", "5", "6"),
+                              "short", "normal")) %>%
+  drop_na(sleep_group, weight)
+
+yrbss_sleep
+```
+
+```{r}
+set.seed(600)
+yrbss_sleep %>%
+  group_by(sleep_group) %>%
+  summarise(mean_weight = mean(weight), sd_weight = sd(weight), n = n())
+```
+
+```{r}
+set.seed(600)
+obs_diff_s <- yrbss_sleep %>%
+  specify(weight ~ sleep_group) %>%
+  calculate(stat = "diff in means", order = c("short", "normal"))
+```
+
+```{r}
+set.seed(600)
+null_dist_s <- yrbss_sleep %>%
+  specify(weight ~ sleep_group) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("short", "normal"))
+```
+
+```{r}
+set.seed(600)
+null_dist_s %>% get_p_value(obs_stat = obs_diff_s, direction = "two_sided")
+```
+
+```{r}
+set.seed(600)
+yrbss_sleep %>%
+  specify(weight ~ sleep_group) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "diff in means", order = c("short", "normal")) %>%
+  get_ci(level = 0.95, type = "percentile")
+```
+
+The sampling is random, the sample size is less than 10% of the population, the two samples are of different people, and both samples are fairly large, approximately 4,733 for short sleepers and 6,748 for those with at least 7 hours. Weight is right-skewed, but with samples this large, the CLT applies to the distribution of the difference.
+
+The mean weight of short sleepers was 68.7 kg, while that of the people who slept for at least 7 hours was 67.3 kg, with an observed difference of 1.40 kg. The value of the p-value based on the permutation test is close to zero, and hence is less than $\alpha=0.05$. The 95% CI for the difference is (0.656 kg, 1.93 kg).
+
+Statistical evidence proves that the students sleeping for less than 7 hours have greater mean weights than those sleeping for 7 or more hours, which differs from the former ones in approximately 1-2 kg. This deviation is relatively small as compared to the variance of weight, and it should be noted that this is only the observational survey and not the experiment, and hence we cannot conclude causality because other variables such as age and sex could be influencing this result.
+
 ------------------------------------------------------------------------
