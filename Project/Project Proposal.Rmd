@@ -1,0 +1,41 @@
+---
+title: DATA 606 Data Project Proposal
+author: "Daanish Rasheed"
+date: "2026-11-03"
+output: pdf_document
+---
+
+### Data Preparation
+
+```{r setup, echo=TRUE, results='hide', warning=FALSE, message=FALSE}
+# load data
+
+```
+
+### Research question
+
+### Cases
+
+**What are the cases, and how many are there?**
+
+### Data collection
+
+**Describe the method of data collection.**
+
+### Type of study
+
+**What type of study is this (observational/experiment)?**
+
+### Data Source
+
+**If you collected the data, state self-collected. If not, provide a citation/link.**
+
+### Describe your variables?
+
+**Are they quantitative or qualitative**
+
+**If you are are running a regression or similar model, which one is your dependent variable?**
+
+### Relevant summary statistics
+
+**Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.**
