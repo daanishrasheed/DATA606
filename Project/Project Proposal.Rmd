@@ -9,14 +9,32 @@ output: pdf_document
 
 ```{r setup, echo=TRUE, results='hide', warning=FALSE, message=FALSE}
 # load data
+library(tidyverse)
+library(scales)
 
+url <- "https://raw.githubusercontent.com/thomasthinks/college-roi-data/refs/heads/main/best-value-colleges-by-state.csv"
+df <- read_csv(url)
+df <- df |>
+  mutate(control = factor(control,
+                          levels = c("public", "private-nonprofit", "private-forprofit")))
+
+```
+
+```{r}
+head(df)
 ```
 
 ### Research question
 
+Of the top-ranking colleges from each state in the United States, is there a relationship between the type of institution, whether public, private non-profit or private profit, and the 30-year net present value (NPV) of attendance in the state?
+
+The results obtained are only from top-ranking institutions since the data only gives details of the top-ranking colleges in each state.
+
 ### Cases
 
 **What are the cases, and how many are there?**
+
+Each case is one institution listed in a state's top-value ranking (up to 15 per state). There are 607 cases across 50 states.
 
 ### Data collection
 
