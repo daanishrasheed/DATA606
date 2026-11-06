@@ -38,21 +38,35 @@ Each case is one institution listed in a state's top-value ranking (up to 15 per
 
 ### Data collection
 
-**Describe the method of data collection.**
+The NPV figures are calculated, notobserved. The data maintainers, LE TEEN, computed them from three public sources:
+
+- FREOPP higher-education ROI data (2021), built on College Scorecard earnings cohorts
+- NCES IPEDS 2023-24 - tuition, room and board
+- BEA Regional Price Parities - 2023, cost-of-living adjustment
+
+The NPV here refers to the value of education today. It reflects the net amount the student is expected to earn in 30 years from his/her education after deducting the cost of earning the degree and considering the time value of future dollars (at a discount of 3% per annum after adjusting for inflation). The schools are ranked according to their NPVs in each state.
 
 ### Type of study
 
-**What type of study is this (observational/experiment)?**
+The NPV calculations are produced by observing what has actually happen. Students choose where to go to college so we have recorded their actual earnings, tuition and costs.
+
+The NPVs have been calculated using actual data. We have taken actual graduate earnings (College Scorecard), tuition and housing costs (IPEDS) and cost of living differences (BEA) and used a formula on them to produce the NPVs. This means it has been transformed.
 
 ### Data Source
 
-**If you collected the data, state self-collected. If not, provide a citation/link.**
+LE TEEN (2026). *College ROI Data: 30-year net present value of U.S. colleges and majors.* Zenodo. <https://doi.org/10.5281/zenodo.21351602>
+
+Repository: <https://github.com/thomasthinks/college-roi-data> (CC BY 4.0). File used: best-value-colleges-by-state.csv
 
 ### Describe your variables?
 
-**Are they quantitative or qualitative**
+- Dependent variable: npv_30yr_resident_usd, the 30-year net present value, in U.S. dollars, of attending an institution as an in-state resident. This is a quantitative variable (continuous). It is the outcome I am trying to explain, so it is the dependent variable in the model.
 
-**If you are are running a regression or similar model, which one is your dependent variable?**
+- Independent variable: control, the type of institution (public, private-nonprofit, or private-forprofit). This is a qualitative variable (categorical, with three levels).
+
+- Other**:** state (qualitative), rank_in_state (quantitative, 1 to 15), institution and city (identifiers).
+
+Because the response is quantitative and the explanatory variable is categorical with three groups, the planned analysis is a comparison of mean NPV across the three groups.
 
 ### Relevant summary statistics
 
