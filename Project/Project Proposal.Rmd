@@ -70,4 +70,35 @@ Because the response is quantitative and the explanatory variable is categorical
 
 ### Relevant summary statistics
 
-**Provide summary statistics for each the variables. Also include appropriate visualizations related to your research question (e.g. scatter plot, boxplots, etc). This step requires the use of R, hence a code chunk is provided below. Insert more code chunks as needed.**
+```{r}
+glimpse(df)
+sum(is.na(df))
+```
+
+```{r}
+df |>
+  group_by(control) |>
+  summarise(n = n())
+```
+
+```{r}
+df |>
+  group_by(control) |>
+  summarise(n = n(),
+            mean = mean(npv_30yr_resident_usd),
+            median = median(npv_30yr_resident_usd),
+            sd = sd(npv_30yr_resident_usd),
+            min = min(npv_30yr_resident_usd),
+            max = max(npv_30yr_resident_usd)) |>
+  mutate()
+```
+
+```{r}
+ggplot(df, aes(npv_30yr_resident_usd)) +
+  geom_histogram(bins = 40) +
+  facet_wrap(~ control, scales = "free_y", ncol = 1) +
+  scale_x_continuous(labels = dollar) +
+  labs(x = "30-year NPV (resident)", y = "Count")
+```
+
+The distributions are right-skewed, so medians are more representative than means. The private for-profit group is small with a count of only 22, so comparisons involving it will be imprecise.
