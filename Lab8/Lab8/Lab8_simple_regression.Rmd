@@ -60,6 +60,12 @@ The data we're working with is in the openintro package and it's called
 
 **Insert your answer here**
 
+```{r}
+dim(hfi)
+```
+
+The dataset has 1,458 rows and 123 columns
+
 2.  What type of plot would you use to display the relationship between
     the personal freedom score, `pf_score`, and one of the other
     numerical variables? Plot this relationship using the variable
@@ -70,6 +76,17 @@ The data we're working with is in the openintro package and it's called
     model to predict the personal freedom score?
 
 **Insert your answer here**
+
+```{r}
+ggplot(data = hfi, aes(x = pf_expression_control, y = pf_score)) +
+  geom_point()
+```
+
+The relationship looks roughly linear as `pf_score` rises steadily along
+`pf_expression_control`. Since the pattern is linear, it would be
+reasonable to use a linear model to predict personal freedom from
+`pf_expression_control`, though predictions would still carry noticeable
+error
 
 If the relationship looks linear, we can quantify the strength of the
 relationship with the correlation coefficient.
