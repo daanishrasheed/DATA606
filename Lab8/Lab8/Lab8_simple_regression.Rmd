@@ -122,6 +122,13 @@ and `pf_score` above.
 
 **Insert your answer here**
 
+There is a positive correlation between the variables, which means that
+the lower the political pressure and control over the content of the
+media, the higher the level of personal freedom score will be r= 0.80.
+This relationship has an approximate linear form and is strong enough.
+Due to the fact that pf_expression_control uses discrete values, the
+dots are grouped into vertical strips, and there is a lot of overlap.
+
 Just as you've used the mean and standard deviation to summarize a
 single variable, you can summarize the relationship between these two
 variables by finding the line that best follows their association. Use
@@ -161,6 +168,8 @@ slope and intercept of your line as well as the sum of squares.
     neighbors?
 
 **Insert your answer here**
+
+The smallest sum of squares I got was 953.
 
 ## The linear model
 
@@ -210,6 +219,21 @@ variability in `pf_free` is explained by `pf_expression_control`.
 
 **Insert your answer here**
 
+```{r}
+m2 <- lm(hf_score ~ pf_expression_control, data = hfi)
+summary(m2)
+```
+
+$$\hat{hf\_score} = 5.15369 + 0.34986 \times pf\_expression\_control$$
+
+This means that on average, for every unit change in
+pf_expression_control, there is a corresponding change of 0.35 units in
+the total human freedom score. The intercept is 5.15; this means that
+the total human freedom score of a country that has a value of zero in
+pf_expression_control is 5.15. Since $R^2 = 0.5775$, this means that
+57.8% of the variability in human freedom score is explained by
+pf_expression_control.
+
 ## Prediction and prediction errors
 
 Let's create a scatterplot with the least squares line for `m1` laid on
@@ -239,6 +263,21 @@ more reliable. They're also used to compute the residuals.
     what is the residual for this prediction?
 
 **Insert your answer here**
+
+Based on the regression line:
+$\hat{y} = 4.61707 + 0.49143 \times 6.7 \approx$ 7.91.
+Overestimate/underestimate is based on what the true country value is.
+There are no observations equal to 6.7 and countries at that point vary
+from around 6.5 (Myanmar, 2009) to 9.2 (Spain, 2010). For instance,
+Chile in 2016 has pf_expression_control = 6.75 and a true pf_score of
+approximately 8.22, and thus the regression line will underestimate it
+by about 8.22 - 7.94 = +0.28. France (2016, 8.77) will be a residual of
+approximately +0.83, whereas Belize (2016, 7.43) will be an overestimate
+with a residual of about -0.51.
+
+```{r}
+predict(m1, data.frame(pf_expression_control = 6.7))
+```
 
 ## Model diagnostics
 
@@ -271,6 +310,18 @@ around 0), and we also reanme the axis labels to be more informative.
 
 **Insert your answer here**
 
+```{r}
+ggplot(data = m1, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0)
+```
+
+There is no strong curved or U-shaped pattern. The residuals are
+scattered around zero across the range of fitted values. This indicates
+that the relationship is reasonably linear and a linear model is
+appropriate. A few large negative residuals at the low end suggest some
+outliers, but no systematic bend.
+
 **Nearly normal residuals**: To check this condition, we can look at a
 histogram
 
@@ -298,12 +349,27 @@ probability plots.
 
 **Insert your answer here**
 
+Unimodal and roughly centered around zero, the histogram is negatively
+skewed, meaning that the right tail is longer than the left tail,
+extending from negative residual values up to about -3.8. Similarly, the
+normal probability plot follows the straight line in the middle but
+moves away from it on the lower side, which means it has a negative
+skew.
+
 **Constant variability**:
 
 9.  Based on the residuals vs. fitted plot, does the constant
     variability condition appear to be met?
 
 **Insert your answer here**
+
+No. The spread of the residuals decreases with the increase in fitted
+values. For the lowest fitted values, the standard deviation of the
+residuals is 1.0, while for the highest ones, the standard deviation of
+the residuals is 0.6, which makes this graph a funnel-shaped one that
+narrows down from left to right. The condition of constant variance is
+fulfilled only approximately, which means that prediction is more
+accurate for high-freedom countries than for low-freedom countries.
 
 ------------------------------------------------------------------------
 
@@ -316,6 +382,23 @@ probability plots.
 
 **Insert your answer here**
 
+I chose personal freedom score (pf_score) and the rule of law score
+(pf_rol), which I expected to be strongly related.
+
+```{r}
+ggplot(data = hfi, aes(x = pf_rol, y = pf_score)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+m3 <- lm(pf_score ~ pf_rol, data = hfi)
+summary(m3)
+```
+
+At a glance there is a clear positive, roughly linear relationship. The
+fitted line is $\hat{pf\_score} = 3.50 + 0.70 \times pf\_rol$.
+
 - How does this relationship compare to the relationship between
   `pf_expression_control` and `pf_score`? Use the $R^2$ values from the
   two model summaries to compare. Does your independent variable seem to
@@ -323,10 +406,65 @@ probability plots.
 
 **Insert your answer here**
 
+For this model $R^2 = 0.5997$, compared with $R^2 = 0.6342$ for
+pf_expression_control and pf_score. Thus, pf_rol accounts for about 60
+percent of the variance in pf_score, which is slightly lower than
+pf_expression_control (63.4%). Neither of them seems to be a superior
+predictor, as both explain almost all the variance. The possible
+explanation for why pf_rol performs a little worse is that rule of law
+is just one of the several dimensions of personal freedom, whereas
+media/expression control is closely related to the score.
+
 - What's one freedom relationship you were most surprised about and why?
   Display the model diagnostics for the regression model analyzing this
   relationship.
 
 **Insert your answer here**
+
+I was most surprised by how weakly personal safety and security from
+homicide (`pf_ss_homicide`) relates to the overall human freedom score
+(`hf_score`). I expected safer countries to be much freer, but the
+relationship is weak.
+
+```{r}
+m4 <- lm(hf_score ~ pf_ss_homicide, data = hfi)
+summary(m4)
+```
+
+```{r}
+ggplot(data = hfi, aes(x = pf_ss_homicide, y = hf_score)) +
+  geom_point() +
+  stat_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+# Diagnostics
+ggplot(data = m4, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  xlab("Fitted values") + ylab("Residuals")
+```
+
+```{r}
+
+ggplot(data = m4, aes(x = .resid)) +
+  geom_histogram(bins = 25) +
+  xlab("Residuals")
+```
+
+```{r}
+ggplot(data = m4, aes(sample = .resid)) +
+  stat_qq() + stat_qq_line()
+```
+
+The slope is 0.10, while $R^2 = 0.074$. Homicide safety only accounts
+for 7% of the variance in total freedom. It can be seen from the
+diagnostics that the model does not fit well. The scatterplot has a wide
+fan pattern, where there are many observations close to large homicide
+values with diverse freedom scores, residuals are negatively skewed (for
+example, Syria 2016 has very low hf_scores but rather high homicide
+score). In hindsight, it can be noted that countries may have low
+homicide rates and at the same time repress freedom of speech or
+religion/market.
 
 ------------------------------------------------------------------------
